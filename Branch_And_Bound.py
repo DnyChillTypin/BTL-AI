@@ -44,7 +44,6 @@ def branch_and_bound(start_node, end_node, heuristics, graph, output_file):
     L = [start_state]
     
     with open(output_file, 'w', encoding='utf-8') as f_out:
-        # Header bảng
         header = f"Brand and Bound \n\n{'TT':<5} | {'TTK':<5} | {'k(u,v)':<6} | {'h(v)':<5} | {'g(v)':<5} | {'f(v)':<5} | {'L1':<30} | {'L'}"
         f_out.write(header + "\n")
         f_out.write("—" * 120 + "\n")
@@ -57,11 +56,9 @@ def branch_and_bound(start_node, end_node, heuristics, graph, output_file):
                 if not lst: return "Trống"
                 return ", ".join([f"{s.node}({s.f})" for s in lst])
 
-            # Nếu cắt tỉa -> KHÔNG in ra bảng nữa (Bỏ qua dòng CẮT)
             if current.f >= best_cost:
                 continue
                 
-            # Đã đến đích -> Lưu kết quả và In trạng thái ĐÍCH
             if u == end_node:
                 if current.g < best_cost:
                     best_cost = current.g
@@ -70,7 +67,6 @@ def branch_and_bound(start_node, end_node, heuristics, graph, output_file):
                 f_out.write("—" * 120 + "\n")
                 continue
             
-            # Khai triển các đỉnh kề
             neighbors = graph.get(u, [])
             L1 = []
             neighbors_info = []
@@ -90,16 +86,14 @@ def branch_and_bound(start_node, end_node, heuristics, graph, output_file):
                 L1.append(new_state)
                 neighbors_info.append((v, k_uv, h_v, g_v, f_v))
             
-            # Sắp xếp L1 tăng dần theo f(v)
             L1.sort(key=lambda x: (x.f, x.node))
             
-            # Cập nhật L
+            # update L
             L = L1 + L
             
             L1_str = format_L(L1)
             L_str = format_L(L)
             
-            # In ra bảng
             if not neighbors_info:
                 f_out.write(f"{u:<5} | {'-':<5} | {'-':<6} | {'-':<5} | {'-':<5} | {'-':<5} | {L1_str:<30} | {L_str}\n")
             else:
@@ -113,7 +107,6 @@ def branch_and_bound(start_node, end_node, heuristics, graph, output_file):
             
             f_out.write("—" * 120 + "\n")
             
-        # In kết quả cuối cùng theo yêu cầu: 1 dòng đường đi, 1 dòng độ dài
         f_out.write("\n")
         if best_path:
             path_str = " —> ".join(best_path)
