@@ -53,7 +53,7 @@ def branch_and_bound(start_node, end_node, heuristics, graph, output_file):
             u = current.node
             
             def format_L(lst):
-                if not lst: return "Trống"
+                if not lst: return "Null"
                 return ", ".join([f"{s.node}({s.f})" for s in lst])
 
             if current.f >= best_cost:
@@ -63,7 +63,7 @@ def branch_and_bound(start_node, end_node, heuristics, graph, output_file):
                 if current.g < best_cost:
                     best_cost = current.g
                     best_path = current.path
-                f_out.write(f"{u:<5} | {'(ĐÍCH)':<5} | {'-':<6} | {'-':<5} | {'-':<5} | {current.f:<5} | {'-':<30} | {format_L(L)}\n")
+                f_out.write(f"{u:<5} | {'TTKT':<5} | {'-':<6} | {'-':<5} | {'-':<5} | {current.f:<5} | {'-':<30} | {format_L(L)}\n")
                 f_out.write("—" * 120 + "\n")
                 continue
             
@@ -110,15 +110,15 @@ def branch_and_bound(start_node, end_node, heuristics, graph, output_file):
         f_out.write("\n")
         if best_path:
             path_str = " —> ".join(best_path)
-            f_out.write(f"Đường đi: {path_str}\n")
-            f_out.write(f"Độ dài: {best_cost}\n")
+            f_out.write(f"Path: {path_str}\n")
+            f_out.write(f"Length: {best_cost}\n")
         else:
-            f_out.write("Không tìm thấy đường đi!\n")
+            f_out.write("No path found\n")
 
 if __name__ == "__main__":
     try:
         start_node, end_node, heuristics, graph = read_input("input.txt")
         branch_and_bound(start_node, end_node, heuristics, graph, "output.txt")
-        print("Đã xuất file output.txt thành công!")
+        print("Output made")
     except Exception as e:
-        print(f"Lỗi: {e}")
+        print(f"Error: {e}")
