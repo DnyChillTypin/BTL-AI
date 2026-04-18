@@ -1,0 +1,26 @@
+A I
+#HEURISTIC
+A 12
+B 11
+C 6
+D 8
+E 7
+F 10
+G 2
+H 4
+I 0
+#GRAPH
+A B 10
+A C 7
+A D 13
+A E 19
+B F 6
+C F 8
+C D 4
+D G 4
+D H 3
+E H 6
+H I 6
+H G 9
+F G 5
+G I 6

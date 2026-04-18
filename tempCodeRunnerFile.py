@@ -1,2 +1,1 @@
-
-        'L': f"[{start}(0)]"
+            L1.sort(key=lambda x: (x.f, x.node))

@@ -1,3 +1,5 @@
+from collections import deque
+
 class NodeState:
     def __init__(self, node, g, f, path):
         self.node = node
@@ -8,6 +10,7 @@ class NodeState:
 def read_input(file_path):
     heuristics = {}
     graph = {}
+    invalid_nodes = set() ###
     
     with open(file_path, 'r', encoding='utf-8') as f:
         lines = f.readlines()
@@ -24,16 +27,28 @@ def read_input(file_path):
                 continue
             elif line == "#GRAPH":
                 mode = "g"
-                continue
+                continue   
                 
             parts = line.split()
             if mode == "h":
                 heuristics[parts[0]] = int(parts[1])
             elif mode == "g":
                 u, v, weight = parts[0], parts[1], int(parts[2])
+                if u not in heuristics:
+                    if u not in invalid_nodes:
+                        print(f"Error: Node '{u}' in #GRAPH not found in #HEURISTIC dictionary.") ###
+                        invalid_nodes.add(u)
+                if v not in heuristics:
+                    if v not in invalid_nodes:
+                        print(f"Error: Node '{v}' in #GRAPH not found in #HEURISTIC dictionary.") ###
+                        invalid_nodes.add(v)
+                    
                 if u not in graph: graph[u] = []
                 graph[u].append((v, weight))
                 
+    if invalid_nodes:
+        raise ValueError("Invalid nodes found in #GRAPH section. Please fix the input file.")
+        
     return start_node, end_node, heuristics, graph
 
 def branch_and_bound(start_node, end_node, heuristics, graph, output_file):
@@ -41,15 +56,15 @@ def branch_and_bound(start_node, end_node, heuristics, graph, output_file):
     best_path = None
     
     start_state = NodeState(start_node, 0, heuristics[start_node], [start_node])
-    L = [start_state]
+    L = deque([start_state])
     
     with open(output_file, 'w', encoding='utf-8') as f_out:
-        header = f"Brand and Bound \n\n{'TT':<5} | {'TTK':<5} | {'k(u,v)':<6} | {'h(v)':<5} | {'g(v)':<5} | {'f(v)':<5} | {'L1':<30} | {'L'}"
+        header = f"Branch and Bound \n\n{'TT':<5} | {'TTK':<5} | {'k(u,v)':<6} | {'h(v)':<5} | {'g(v)':<5} | {'f(v)':<5} | {'L1':<30} | {'L'}"
         f_out.write(header + "\n")
         f_out.write("—" * 120 + "\n")
         
         while L:
-            current = L.pop(0)
+            current = L.popleft()
             u = current.node
             
             def format_L(lst):
@@ -63,7 +78,7 @@ def branch_and_bound(start_node, end_node, heuristics, graph, output_file):
                 if current.g < best_cost:
                     best_cost = current.g
                     best_path = current.path
-                f_out.write(f"{u:<5} | {'TTKT':<5} | {'-':<6} | {'-':<5} | {'-':<5} | {current.f:<5} | {'-':<30} | {format_L(L)}\n")
+                f_out.write(f"{u:<5} | {'TTKT':<5} | {'-':<6} | Độ dài tạm thời: {current.g:<4} | {'-':<30} | {format_L(L)}\n")
                 f_out.write("—" * 120 + "\n")
                 continue
             
@@ -88,8 +103,7 @@ def branch_and_bound(start_node, end_node, heuristics, graph, output_file):
             
             L1.sort(key=lambda x: (x.f, x.node))
             
-            # update L
-            L = L1 + L
+            L.extendleft(reversed(L1))
             
             L1_str = format_L(L1)
             L_str = format_L(L)
@@ -120,5 +134,6 @@ if __name__ == "__main__":
         start_node, end_node, heuristics, graph = read_input("input.txt")
         branch_and_bound(start_node, end_node, heuristics, graph, "output.txt")
         print("Output made")
+        
     except Exception as e:
         print(f"Error: {e}")
