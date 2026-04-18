@@ -78,7 +78,9 @@ def branch_and_bound(start_node, end_node, heuristics, graph, output_file):
                 if current.g < best_cost:
                     best_cost = current.g
                     best_path = current.path
-                f_out.write(f"{u:<5} | {'TTKT':<5} | {'-':<6} | Độ dài tạm thời: {current.g:<4} | {'-':<30} | {format_L(L)}\n")
+                
+                msg = f"Current cost: {current.g}"
+                f_out.write(f"{u:<5} | {'TTKT':<5} | {'-':<6} | {msg:<21} | {'-':<30} | {format_L(L)}\n")
                 f_out.write("—" * 120 + "\n")
                 continue
             
