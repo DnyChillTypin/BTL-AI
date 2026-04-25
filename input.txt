@@ -1,28 +1,25 @@
-A B
+B L
 #HEURISTIC
-A 14
-B 0
-C 15
-D 6
-E 8
-F 7
-G 12
-H 10
-I 4
-K 2
+B 15
+F 14
+G 6
+H 8
+A 5
+E 10
+D 3
+C 4
+L 0
 #GRAPH
-A C 9
-A D 7
-A E 13
-A F 20
-C H 6
-D H 8
-D E 4
-E K 4
-E I 3
-F G 4
-F I 6
-H K 5
-I K 9
-I B 5
-K B 6
+B F 9
+B G 7
+B H 13
+B A 10
+F E 7
+G E 8
+G H 4
+H D 4
+H C 5
+A C 6
+C D 9
+C L 4
+D L 6

@@ -105,7 +105,9 @@ def branch_and_bound(start_node, end_node, heuristics, graph, output_file):
             
             L1.sort(key=lambda x: (x.f, x.node))
             
-            L.extendleft(reversed(L1))
+            for state in L1:
+                L.append(state)
+            L = deque(sorted(L, key=lambda x: (x.f, x.node)))
             
             L1_str = format_L(L1)
             L_str = format_L(L)
